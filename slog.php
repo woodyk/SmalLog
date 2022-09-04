@@ -12,6 +12,17 @@ $slog = './slog.html';
 ?>
 
 <head>
+<script type="text/javascript">
+function showHide() {
+	var x = document.getElementById("sbForm");
+	if (x.style.display === "none") {
+		x.style.display = "block";
+	} else {
+		x.style.display = "none";
+	}
+}
+</script>
+
 <style type="text/css">
 html {
 	font-family: "Lucida Console", "Courier New", monospace;
@@ -29,7 +40,13 @@ div.timeHeader {
 div.titleHeader {
 	background-color: #660000;
 	color: white;
-	font-size: 20px;
+	font-size: 16px;
+}
+
+div.sticky {
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
 }
 
 div.posted {
@@ -42,9 +59,14 @@ a {
 }
 
 .p1 {
+	border-style: solid;
+	border-width: 1px;
+	border-color: white;
+	border-radius: 5px;
 	font-size: 14px;
 	color:white;
-	padding: 5px;
+	background-color: rgb(0, 0, 0, 0.8);
+	padding: 10px;
 }
 .p2 {
 	font-size: 14px;
@@ -60,19 +82,20 @@ a {
 	width: 100%;
 }
 
+/*
 .card:hover {
 	padding: 5px
 }
+*/
 
 .center {
 	margin: auto;
 }
 
 textarea {
-	left: 10px;
-	top: 10px;
-	width: calc(100vw - 20px);
-	height: calc(25vh - 20px);
+	margin: auto;
+	width: calc(100vw - 40px);
+	height: calc(20vh - 20px);
 	resize: none;
 }
 
@@ -81,14 +104,12 @@ textarea {
 </head>
 <title>SmalLog</title>
 <body>
-<div class="center">
-	<div class="titleHeader">
+<div class="sticky">
+<div class="p1 center">
+	<div class="titleHeader" onclick="showHide()">
 		<a href="slog.php"><?php echo "$title $version"; ?></a>
 	</div>
-</div>
-
-<div class="p1">
-<form name="sbForm" method="POST">
+<form id="sbForm" name="sbForm" method="POST">
 	<p>
 		<b>Title:</b> <input type="text" size="25" name="sbName">
 		</br>
@@ -99,6 +120,8 @@ textarea {
 	</p>
 </form>
 </div>
+</div>
+</br>
 
 <?php
 
@@ -110,7 +133,7 @@ if (isset($_POST['submit']) && isset($_POST['sbText'])) {
 	$dtime = strftime('%c');
 
 	if ($text != "") {
-		$posted = "<!--NAME: $name | POSTED: $dtime-->\n<div class=\"card center\">\n<div class=\"timeHeader\"><b>$name</b> ($dtime)</div>\n<div class=\"posted\">\n<pre class=\"p2\">\n$text\n</pre>\n</div>\n</div>\n";
+		$posted = "<!--NAME: $name | POSTED: $dtime-->\n<div class=\"card center\">\n<div class=\"timeHeader\"><b>#$name</b> ($dtime)</div>\n<div class=\"posted\">\n<pre class=\"p2\">\n$text\n</pre>\n</div>\n</div>\n";
 
 		if (file_exists($slog)) {
 			$handle = fopen($slog, "r");
