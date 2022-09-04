@@ -6,4 +6,4 @@ All data is kept on the same page for easy searching using your web browser \<ct
 paste a file will be created in the same directory call slog.html.  At any time you can press the clear  
 button to erase all your notes.
 
-![SmalLog](https://github.com/woodyk/SmalLog/blob/main/SmallLog-screenshot.png?raw=true)
+![SmalLog](https://github.com/woodyk/SmalLog/blob/main/slog-screenshot.png?raw=true)
