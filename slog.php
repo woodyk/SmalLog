@@ -72,7 +72,7 @@ textarea {
 	left: 10px;
 	top: 10px;
 	width: calc(100vw - 20px);
-	height: calc(30vh - 20px);
+	height: calc(25vh - 20px);
 	resize: none;
 }
 
