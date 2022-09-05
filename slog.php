@@ -5,6 +5,7 @@ Author: Woody K.
 -->
 <?php
 
+$scriptSelf = $_SERVER['SCRIPT_NAME'];
 $version = "v0.1";
 $title = "SmalLog";
 $slog = './slog.html';
@@ -107,7 +108,7 @@ textarea {
 <div class="sticky">
 <div class="p1 center">
 	<div class="titleHeader" onclick="showHide()">
-		<a href="slog.php"><?php echo "$title $version"; ?></a>
+		<a href="<?php $scriptSelf ?>"><?php echo "$title $version"; ?></a>
 	</div>
 <form id="sbForm" name="sbForm" method="POST">
 	<p>
