@@ -31,8 +31,12 @@ function showHide(id) {
 </script>
 
 <style type="text/css">
-html {
+* {
 	font-family: "Lucida Console", "Courier New", monospace;
+}
+
+html {
+
 }
 
 body {
@@ -109,30 +113,48 @@ textarea {
 	border: none;
 	border-style: none;
 	padding: 10px;
+	cursor: pointer;
 }
 
 input:focus, textarea:focus, select:focus {
-	outline: none;
+	outline: 1px solid white;
 }
 
 .input-text {
 	border-radius: 5px;
 	color: black;
 	margin: auto;
-	font-family: "Lucida Console", "Courier New", monospace;
 	width: calc(100vw - 40px);
 	height: calc(5vh - 20px);
 	font-weight: bold;
 	padding: 10px;
+	cursor: pointer;
 }
 
 .submit-button {
 	background: #282c34;
 	color: white;
 	height: 30px;
-	width: 80px;
+	width: 100px;
 	border-style: none;
 	border-radius: 5px;
+	padding: 8px;
+	cursor: pointer;
+	text-align: center;
+}
+
+input[type="file"]{
+    opacity: 0;
+    width: 0.1px;
+    height: 0.1px;
+    overflow: hidden;
+    z-index: -1;
+    position: absolute;
+
+}
+
+.upload-button {
+
 }
 
 /* highlight.js css theme block */
@@ -151,16 +173,23 @@ pre code.hljs{border-radius:10px;display:block;overflow-x:auto;padding:1em}code.
 <div id="sbForm">	
 <form name="sbForm" method="POST">
 	<p>
-		<input class="input-text" type="text" size="50" name="sbName" placeholder=" log title">
+	<div class="form">
+		<input class="input-text" type="text" size="50" name="sbName" placeholder=" log title" />
 		</br>
 		</br>
 		<textarea id="sbText" name="sbText" rows="10" cols="100" maxlength="1000000" placeholder=" Your log entry here."></textarea>
 		</br>
 		</br>
-		<input type="submit" class="submit-button" name="submit" value="log">
-		<input type="reset" class="submit-button" name="reset" value="clear form">
-		<input type="submit" class="submit-button" name="clear" value="clear data" onclick="return confirm('Erase all log data?')">
+		<input type="submit" class="submit-button" name="submit" value="log" />
+		<input type="reset" class="submit-button" name="reset" value="clear form" />
+		<input type="submit" class="submit-button" name="clear" value="clear data" onclick="return confirm('Erase all log data?')" />
+		<!--
+		<label for="upload-button" class="submit-button">upload file</label>
+		<input class= "submit-button" id="upload-button" type="file" name="file" value="upload file" />
+		-->
+
 	</p>
+	</div>
 </form>
 </div>
 </div>
