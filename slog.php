@@ -164,7 +164,7 @@ pre code.hljs{border-radius:10px;display:block;overflow-x:auto;padding:1em}code.
 </style>
 
 </head>
-<title>SmalLog</title>
+<title><?php echo "$title" ?></title>
 <body>
 <div class="p1 center sticky">
 	<div class="titleHeader" onclick="showHide('sbForm')">
