@@ -43,23 +43,23 @@ for opt, arg in opts:
         url = arg
 
 if 'sbName' not in locals():
-    print("Please specify a title.")
+    print("error: not title provided")
     exit()
 
-print(filename)
-print(sbName)
-print(url)
-
 if exists(filename):
-    handle = open(filename, "r")
-    sbText = handle.read()
+    try:
+        handle = open(filename, "r")
+        sbText = handle.read()
+    except:
+        print("error: can not open" + filename + "for reading")
+        exit()
 
 elif select.select([sys.stdin, ], [], [], 0.0)[0]:
     for line in sys.stdin:
         sbText = sbText + line
 
 else:
-    print("No content provided.")
+    print("error: no file or STDIN provided.")
     exit()
 
 obj = {
@@ -70,4 +70,7 @@ obj = {
 
 response = requests.post(url, data = obj)
 
-print(response)
+if response.status_code == 200:
+    print("log posted")
+else:
+    print(f'error: unable to post response[{response.status_code}]')
