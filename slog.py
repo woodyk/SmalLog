@@ -23,6 +23,8 @@ def help():
     print("-u\tURL for slog to post to.")
     print()
     print("Note: Enclose any argument with spaces in quotes or escape them.")
+    print()
+    exit()
 
 
 
