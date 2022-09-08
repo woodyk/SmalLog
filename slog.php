@@ -4,7 +4,7 @@
 // configure me
 $scriptSelf = $_SERVER['SCRIPT_NAME'];
 $version = "v0.1";
-$title = "SmalLog"; // Title to display on the top of the page
+$title = "slog"; // Title to display on the top of the page
 $slog = './slog.html'; // Location for writing log entries
 ?>
 
