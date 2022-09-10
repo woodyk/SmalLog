@@ -6,6 +6,8 @@ $scriptSelf = $_SERVER['SCRIPT_NAME'];
 $version = "v0.1";
 $title = "slog"; // Title to display on the top of the page
 $slog = './slog.html'; // Location for writing log entries
+
+$uploaddir = './uploads/';
 ?>
 
 <head>
@@ -13,6 +15,7 @@ $slog = './slog.html'; // Location for writing log entries
 <!-- Syntax Highlighting -->
 <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script type="text/javascript">
 // Init syntax highlighting
@@ -27,6 +30,14 @@ function showHide(id) {
 		x.style.display = "none";
 	}
 }
+$(document).ready(function(){
+	$('input[type="file"]').change(function(e){
+		var fileName = e.target.files[0].name;
+		//alert('The file "' + fileName +  '" has been selected.');
+		document.getElementById("uploadFile").innerHTML = fileName;
+		document.getElementById("filePanel").style.display = "block";
+	});
+});
 
 </script>
 
@@ -99,6 +110,7 @@ a {
 */
 
 .center {
+	text-align: center;
 	margin: auto;
 }
 
@@ -144,17 +156,23 @@ input:focus, textarea:focus, select:focus {
 }
 
 input[type="file"]{
-    opacity: 0;
-    width: 0.1px;
-    height: 0.1px;
-    overflow: hidden;
-    z-index: -1;
-    position: absolute;
-
+	opacity: 0;
+	width: 0.1px;
+	height: 0.1px;
+	overflow: hidden;
+	z-index: -1;
+	position: absolute;
 }
 
 .upload-button {
+}
 
+.file-panel {
+	background: white;
+	color: black;
+	height: 20px;
+	border-radius: 5px;
+	padding: 8px;
 }
 
 /* highlight.js css theme block */
@@ -166,62 +184,91 @@ pre code.hljs{border-radius:10px;display:block;overflow-x:auto;padding:1em}code.
 </head>
 <title><?php echo "$title" ?></title>
 <body>
-<div class="p1 center sticky">
+<div class="p1 sticky">
 	<div class="titleHeader" onclick="showHide('sbForm')">
 		<a href="<?php $scriptSelf ?>"><?php echo "$title $version"; ?></a>
 	</div>
 <div id="sbForm">	
-<form name="sbForm" method="POST">
+<form name="sbForm" method="POST" enctype="multipart/form-data">
 	<p>
 	<div class="form">
 		<input class="input-text" type="text" size="50" name="sbName" placeholder=" log title" />
-		</br>
-		</br>
+		<br />
+		<br />
 		<textarea id="sbText" name="sbText" rows="10" cols="100" maxlength="1000000" placeholder=" Your log entry here."></textarea>
-		</br>
-		</br>
-		<input type="submit" class="submit-button" name="submit" value="log" />
+		<br />
+		<br />
+		<input id="upload-button" type="file" name="file" value="upload file" onhange="showFileName(uploadFile)"/>
+		<label for="upload-button" class="submit-button">upload file</label>
 		<input type="reset" class="submit-button" name="reset" value="clear form" />
 		<input type="submit" class="submit-button" name="clear" value="clear data" onclick="return confirm('Erase all log data?')" />
-		<!--
-		<label for="upload-button" class="submit-button">upload file</label>
-		<input class= "submit-button" id="upload-button" type="file" name="file" value="upload file" />
-		-->
+		<input type="submit" class="submit-button" name="submit" value="submit" />
+
+
+		<div id="filePanel" hidden>
+			<br />
+			<div class="file-panel center"><label id="uploadFile"></label></div>
+		</div>
 
 	</p>
 	</div>
 </form>
 </div>
 </div>
-</br>
+<br />
 
 <?php
 
-if (isset($_POST['submit']) && isset($_POST['sbText'])) {
-	$name  = $_POST['sbName'];
-	$text  = $_POST['sbText'];
-	$text  = htmlentities($text);
-	$name  = htmlentities($name);
+if (isset($_POST['submit'])) {
 	$dtime = strftime('%c');
 
-	if ($text != "") {
-		$posted = "<!--NAME: $name | POSTED: $dtime-->\n<div class=\"card center\">\n\t<div class=\"timeHeader\"><b>&nbsp;#&nbsp;$name</b> ($dtime)</div>\n\t<div>\n\t\t<pre class=\"p2\"><code>$text</code></pre>\n\t</div>\n</div>\n";
+	if (!$_POST['sbText'] == "") {
+		$name  = $_POST['sbName'];
+		$text  = $_POST['sbText'];
+		$text  = htmlspecialchars($text);
+		$name  = htmlspecialchars($name);
+		$posted = "<!--NAME: $name | POSTED: $dtime-->\n<div class=\"card\">\n\t<div class=\"timeHeader\"><b>&nbsp;#&nbsp;$name</b> ($dtime)</div>\n\t<div>\n\t\t<pre class=\"p2\"><code>$text</code></pre>\n\t</div>\n</div>\n";
+	} elseif (isset($_FILES)) {
+		$target_file = $uploaddir . basename($_FILES['file']['name']);
+		$name = htmlspecialchars(basename($_FILES['file']['name']));
+		$text = '<a href=' . htmlspecialchars($target_file) . '>File:'.$name.'</a>';
 
-		if (file_exists($slog)) {
-			$handle = fopen($slog, "r");
-			$content = fread($handle, filesize($slog));
-			fclose($handle);
+		if (!is_dir($uploddir)) {
+			mkdir($uploaddir);
 		}
 
-		$handle = fopen($slog, "w");
-		fwrite($handle, $posted);
-		fwrite($handle, $content);
+		if (move_uploaded_file($_FILES['file']['tmp_name'], $target_file)) {
+			echo '<div class="file-panel center">file ' . htmlspecialchars( basename($_FILES['file']['name'] )) . ' uploaded</div><br />';
+			$posted = "<!--NAME: $name | POSTED: $dtime-->\n<div class=\"card\">\n\t<div class=\"timeHeader\"><b>&nbsp;#&nbsp;$name</b> ($dtime)</div>\n\t<div>\n\t\t<pre class=\"p2\">$text</pre>\n\t</div>\n</div>\n";
+			
+		} else {
+			echo '<div class="file-panel center">error: unable to upload file</div><br />';
+		}
+	}
+
+	if (file_exists($slog)) {
+		$handle = fopen($slog, "r");
+		$content = fread($handle, filesize($slog));
 		fclose($handle);
 	}
+
+	$handle = fopen($slog, "w");
+	fwrite($handle, $posted);
+	fwrite($handle, $content);
+	fclose($handle);
+	
 } elseif (isset($_POST['clear'])) {
 	unlink($slog);
-}
 
+	if (is_dir($uploaddir)) {
+        	$files = scandir($uploaddir);
+        	foreach ($files as $key => $value) {
+        	        if (!preg_match('/^\.|^\.\./', $value)) {
+				unlink($uploaddir.$value);
+        	        }
+        	}
+	}
+}
 
 if (file_exists($slog)) {
 	include($slog);
