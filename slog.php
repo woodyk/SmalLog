@@ -238,7 +238,7 @@ if (isset($_POST['submit'])) {
 		}
 
 		if (move_uploaded_file($_FILES['file']['tmp_name'], $target_file)) {
-			echo '<div class="file-panel center">file ' . htmlspecialchars( basename($_FILES['file']['name'] )) . ' uploaded</div><br />';
+			echo '<div class="file-panel center">file ' . htmlspecialchars( basename($_FILES['file']['name'] )) . ' uploaded</div><br /><meta http-equiv="refresh" content="2">';
 			$posted = "<!--NAME: $name | POSTED: $dtime-->\n<div class=\"card\">\n\t<div class=\"timeHeader\"><b>&nbsp;#&nbsp;$name</b> ($dtime)</div>\n\t<div>\n\t\t<pre class=\"p2\">$text</pre>\n\t</div>\n</div>\n";
 			
 		} else {
