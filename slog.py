@@ -10,7 +10,7 @@ import select
 from os.path import exists
 
 argv = sys.argv[1:]
-url = 'http://yourwebsite/slog/slog.php'
+url = 'http://yourwebsite/slog/index.php'
 sbName = str() 
 sbText = str()
 filename = str()
